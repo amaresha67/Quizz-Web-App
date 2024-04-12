@@ -1,24 +1,42 @@
-import logo from './logo.svg';
-import './App.css';
+// App.js
+import React from "react";
+import "./App.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import Home from "./components/Home";
+import TeacherLogin from "./components/teacher/Login";
+import StudentLogin from "./components/student/Login";
+import TeacherDashboard from "./components/teacher/Dashboard";
+import StudentDashboard from "./components/student/Dashboard";
+
+import { StateProvider } from "./reducers/questionReducer.js"; // Imort the StateProvider
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <StateProvider>
+      <Router>
+        <div className="h-100 ">
+          <Navbar />
+          <div className="content">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/teacherlogin" element={<TeacherLogin />} />
+              <Route path="/studentlogin" element={<StudentLogin />} />
+              <Route
+                path="/teacherdashboard/*"
+                element={<TeacherDashboard />}
+              />
+              <Route
+                path="/studentdashboard/*"
+                element={<StudentDashboard />}
+              />
+            </Routes>
+          </div>
+        </div>
+      </Router>
+    </StateProvider>
   );
 }
 
