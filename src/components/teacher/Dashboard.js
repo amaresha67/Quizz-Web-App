@@ -10,7 +10,7 @@ import { faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 
 function TeacherDashboard() {
   return (
-    <div className="h-100 bg-secondary pb-5">
+    <div className="h-100  pb-5">
       <Routes>
         <Route path="/" element={<TeacherHome />} />
         <Route path="/creattest" element={<CreateTest />} />
