@@ -1,0 +1,28 @@
+.main-text-h1 {
+  color: #24edea; /* Set text color to white */
+  text-shadow: 2px 2px 4px #000; /* Add a shadow effect */
+}
+.active{
+  color: #dfcfe5;
+  border-bottom: #cf09f7 solid ;
+  border-width: 3px;
+}
+.logout{
+  color: #dfcfe5;
+ 
+}
+.inactive{
+  color: #dfcfe5;
+}
+.navbgcolor{
+  background-color: #282c2c;
+  
+}
+.content {
+  padding-top: 70px; 
+  margin: 0;
+}
+
+
+
+
