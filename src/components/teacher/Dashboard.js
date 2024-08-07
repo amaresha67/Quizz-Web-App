@@ -21,7 +21,7 @@ function TeacherDashboard() {
 
 function TeacherHome() {
   const { state, dispatch } = useContext(InitialStateContext);
-  const Time = state.testDetails.testTime;
+
   return (
     <div className="container mt-5">
       <div className="row">
@@ -30,56 +30,71 @@ function TeacherHome() {
         </div>
       </div>
       <div className="row ">
-        {state.testCreated ? (
-          <div className="col">
-            <button className="btn btn-primary">
-              <Link
-                to="/teacherdashboard/creattest"
-                className="text-decoration-none text-white"
-              >
-                Edit test
-              </Link>
-            </button>
-          </div>
-        ) : (
-          <div className="col">
-            <button className="btn btn-primary">
-              <Link
-                to="/teacherdashboard/creattest"
-                className="text-decoration-none text-white"
-              >
-                Create New Test
-              </Link>
-            </button>
-          </div>
-        )}
+        <div className="col">
+          <button className="btn btn-primary">
+            <Link
+              to="/teacherdashboard/creattest"
+              className="text-decoration-none text-white"
+            >
+              Create New Test
+            </Link>
+          </button>
+        </div>
       </div>
       {state.testCreated && (
         <div className="row mt-3 d-flex justify-content-around bg-warning-subtle p-3">
           <div className="text-center">
             <h3>Available Tests</h3>
           </div>
-          <div className="col-md-4 p-3 bg-white ">
-            <h5>
-              <span className="pe-3">Test Name:</span>
-              <span>{state.testDetails.testName}</span>
-            </h5>
-            <p>
-              <span className="pe-3">Test Duration:</span>
-              <span className="pe-3">{Time.substring(0, 2) + " "}hours</span>
-              <span>{Time.substring(3, Time.length) + " "}minutes</span>
-            </p>
-            <button
-              className="btn btn-primary"
-              onClick={() =>
-                dispatch({
-                  type: "deleteTest",
-                })
-              }
-            >
-              Delete Test
-            </button>
-          </div>
+          {state.tests.map((test, index) => (
+            <div className="col-md-4 p-3 bg-white m-1">
+              <h5>
+                <span className="pe-3">Test Name:</span>
+                <span>{test.testDetails.testName}</span>
+              </h5>
+              <p>
+                <span className="pe-3">Test Duration:</span>
+                <span className="pe-3">
+                  {test.testDetails.testTime.substring(0, 2) + " "}hours
+                </span>
+                <span>
+                  {test.testDetails.testTime.substring(
+                    3,
+                    test.testDetails.testTime.length
+                  ) + " "}
+                  minutes
+                </span>
+              </p>
+              <button
+                className="btn btn-primary mx-2"
+                onClick={() =>
+                  dispatch({
+                    type: "deleteTest",
+                    index: index,
+                  })
+                }
+              >
+                Delete Test
+              </button>
+
+              <button
+                className="btn btn-primary"
+                onClick={() =>
+                  dispatch({
+                    type: "EditTest",
+                    index: index,
+                  })
+                }
+              >
+                <Link
+                  to="/teacherdashboard/creattest"
+                  className="text-decoration-none text-white"
+                >
+                  Edit test
+                </Link>
+              </button>
+            </div>
+          ))}
         </div>
       )}
     </div>
@@ -219,22 +234,53 @@ function CreateTest() {
                   state.questions.length > 0 ? " col-md-3 mt-3 " : "d-none"
                 }`}
               >
-                <button
-                  className="btn btn-primary mt-5"
-                  onClick={() => {
-                    dispatch({
-                      type: "testCreated",
-                    });
-                    toast.success("Test is added!", {
-                      autoClose: 3000,
-                    });
-                    setTimeout(() => {
-                      navigate("/teacherdashboard");
-                    }, 3000);
-                  }}
-                >
-                  Add Test
-                </button>
+                {state.editTest ? (
+                  <button
+                    className="btn btn-primary mt-5"
+                    onClick={() => {
+                      dispatch({
+                        type: "UpdateTest",
+                        questions: state.questions,
+                        testTime: state.testDetails.testTime,
+                        testName: state.testDetails.testName,
+                      });
+
+                      toast.success("Test updated!", {
+                        autoClose: 3000,
+                      });
+                      setTimeout(() => {
+                        navigate("/teacherdashboard");
+                      }, 3000);
+                    }}
+                  >
+                    Update Test
+                  </button>
+                ) : (
+                  <button
+                    className="btn btn-primary mt-5"
+                    onClick={() => {
+                      dispatch({
+                        type: "testCreated",
+                      });
+
+                      dispatch({
+                        type: "AddTest",
+                        questions: state.questions,
+                        testTime: state.testDetails.testTime,
+                        testName: state.testDetails.testName,
+                      });
+
+                      toast.success("Test is added!", {
+                        autoClose: 3000,
+                      });
+                      setTimeout(() => {
+                        navigate("/teacherdashboard");
+                      }, 3000);
+                    }}
+                  >
+                    Add Test
+                  </button>
+                )}
               </div>
             </div>
           </div>

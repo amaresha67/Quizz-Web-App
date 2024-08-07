@@ -15,7 +15,7 @@ function TestPage({ AnswerState, AnswerDispatch }) {
     ans = AnswerState.answers[qIndex];
   }
   const handleNext = () => {
-    if (qIndex < state.questions.length - 1) {
+    if (qIndex < state.tests[state.presentTestIndex].questions.length - 1) {
       setQIndex(qIndex + 1);
     }
   };
@@ -38,12 +38,21 @@ function TestPage({ AnswerState, AnswerDispatch }) {
     <div className="container bg-warning-subtle p-2 mt-2">
       <div className="row d-flex justify-content-end m-1">
         <div className="col">
-          <h3>{state.testDetails.testName}</h3>
+          <h3>{state.tests[state.presentTestIndex].testDetails.testName}</h3>
         </div>
         <TestTimer
           duration={
-            parseInt(state.testDetails.testTime.substring(0, 2)) * 60 +
-            parseInt(state.testDetails.testTime.substring(3, 5))
+            parseInt(
+              state.tests[
+                state.presentTestIndex
+              ].testDetails.testTime.substring(0, 2)
+            ) *
+              60 +
+            parseInt(
+              state.tests[
+                state.presentTestIndex
+              ].testDetails.testTime.substring(3, 5)
+            )
           }
           onTimerComplete={() => {
             console.log("time over");
@@ -53,32 +62,39 @@ function TestPage({ AnswerState, AnswerDispatch }) {
       <div className="row d-flex justify-content-center">
         <div className="col-7">
           <div className="row bg-white p-3 ">
-            {state.questions && state.questions[qIndex] && (
-              <div className=" bg-primary-subtle m-2 border-primary rounded">
-                <h5>
-                  <span className="text-danger pe-1">{qIndex + 1}</span>
-                  {state.questions[qIndex].question}
-                </h5>
-              </div>
-            )}
-            <div className="px-2 ">
-              {state.questions && state.questions[qIndex] && (
-                <ol>
-                  {state.questions[qIndex].options.map((option, index) => (
-                    <li
-                      key={index}
-                      className={
-                        ans === option
-                          ? "bg-dark-subtle my-1 rounded p-1"
-                          : "bg-info-subtle my-1 rounded p-1"
-                      }
-                      onClick={() => handleOptionSelect(option, qIndex)}
-                    >
-                      {option}
-                    </li>
-                  ))}
-                </ol>
+            {state.tests[state.presentTestIndex].questions &&
+              state.tests[state.presentTestIndex].questions[qIndex] && (
+                <div className=" bg-primary-subtle m-2 border-primary rounded">
+                  <h5>
+                    <span className="text-danger pe-1">{qIndex + 1}</span>
+                    {
+                      state.tests[state.presentTestIndex].questions[qIndex]
+                        .question
+                    }
+                  </h5>
+                </div>
               )}
+            <div className="px-2 ">
+              {state.tests[state.presentTestIndex].questions &&
+                state.tests[state.presentTestIndex].questions[qIndex] && (
+                  <ol>
+                    {state.tests[state.presentTestIndex].questions[
+                      qIndex
+                    ].options.map((option, index) => (
+                      <li
+                        key={index}
+                        className={
+                          ans === option
+                            ? "bg-dark-subtle my-1 rounded p-1"
+                            : "bg-info-subtle my-1 rounded p-1"
+                        }
+                        onClick={() => handleOptionSelect(option, qIndex)}
+                      >
+                        {option}
+                      </li>
+                    ))}
+                  </ol>
+                )}
             </div>
           </div>
           <div className="row bg-danger-subtle mt-1 d-flex justify-content-around p-2">
@@ -94,7 +110,10 @@ function TestPage({ AnswerState, AnswerDispatch }) {
             <div className="col-4">
               <button
                 onClick={handleNext}
-                disabled={qIndex === state.questions.length - 1}
+                disabled={
+                  qIndex ===
+                  state.tests[state.presentTestIndex].questions.length - 1
+                }
                 className="btn btn-primary"
               >
                 Next
@@ -106,26 +125,28 @@ function TestPage({ AnswerState, AnswerDispatch }) {
           className="col-3 row p-2 bg-white border border-primary"
           style={{ maxHeight: "300px", overflowY: "auto" }}
         >
-          {state.questions &&
-            state.questions[qIndex] &&
-            state.questions.map((option, index) => (
-              <div
-                className={`rounded rounded-circle m-1 ${
-                  qIndex === index
-                    ? "bg-primary"
-                    : AnswerState.answers[index] === undefined
-                    ? "bg-primary-subtle"
-                    : "bg-success"
-                } text-center`}
-                style={{ width: "40px", height: "40px", fontSize: "22px" }}
-                onClick={() => {
-                  setQIndex(index);
-                }}
-              >
-                {console.log("sd", AnswerState.answers[index])}
-                {index + 1}
-              </div>
-            ))}
+          {state.tests[state.presentTestIndex].questions &&
+            state.tests[state.presentTestIndex].questions[qIndex] &&
+            state.tests[state.presentTestIndex].questions.map(
+              (option, index) => (
+                <div
+                  className={`rounded rounded-circle m-1 ${
+                    qIndex === index
+                      ? "bg-primary"
+                      : AnswerState.answers[index] === undefined
+                      ? "bg-primary-subtle"
+                      : "bg-success"
+                  } text-center`}
+                  style={{ width: "40px", height: "40px", fontSize: "22px" }}
+                  onClick={() => {
+                    setQIndex(index);
+                  }}
+                >
+                  {console.log("sd", AnswerState.answers[index])}
+                  {index + 1}
+                </div>
+              )
+            )}
         </div>
       </div>
       <div className="row">

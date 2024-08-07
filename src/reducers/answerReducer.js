@@ -1,7 +1,5 @@
-import { createContext } from "react";
 import { produce } from "immer";
 
-export const InitialAnswersContext = createContext();
 export const initialState = {
   answers: {},
 };
